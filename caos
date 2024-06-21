@@ -1,0 +1,37 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+
+# Definición de las ecuaciones de Lorenz
+def lorenz(t, xyz, sigma, rho, beta):
+    x, y, z = xyz
+    dxdt = sigma * (y - x)
+    dydt = x * (rho - z) - y
+    dzdt = x * y - beta * z
+    return [dxdt, dydt, dzdt]
+
+# Parámetros de las ecuaciones de Lorenz
+sigma = 10.0
+rho = 28.0
+beta = 8.0 / 3.0
+
+# Condiciones iniciales
+xyz0 = [0.1, 0.0, 0.0]
+
+# Tiempo de integración
+t_span = (0, 100)
+t_eval = np.linspace(t_span[0], t_span[1], 10000)
+
+# Resolución numérica de las ecuaciones de Lorenz
+sol = solve_ivp(lorenz, t_span, xyz0, args=(sigma, rho, beta), t_eval=t_eval)
+
+# Graficar las soluciones
+fig = plt.figure(figsize=(10, 8))
+ax = fig.add_subplot(111, projection='3d')
+ax.plot(sol.y[0], sol.y[1], sol.y[2], 'b-', linewidth=0.5)
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
+ax.set_title('Atractor de Lorenz')
+
+plt.show()
